@@ -82,9 +82,13 @@ void test_lagrange() {
 
   poly wynik=lagrange(x,y);
   cout<<"Test interpolacji Lagrange'a:"<<endl;
-  cout<<"\tx = "<<x<<endl;
-  cout<<"\ty = "<<y<<endl;
-  cout<<"\tInterpolacja punktów x i y: "<<wynik<<endl;
+  for (int i=0;i<x.size();i++) {
+    cout<<"\t("<<x[i]<<";"<<y[i]<<") ";
+  }
+  cout<<endl;
+  cout<<"\tWielomian przechodzący przez te punkty: "<<wynik<<endl;
+  //cout<<"\tx = "<<x<<endl;
+  //cout<<"\ty = "<<y<<endl;
 }
 
 void test_mul() {
