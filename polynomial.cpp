@@ -1,4 +1,4 @@
-// Implementacja modułu "polynomial".
+// Program do testowania modułu "polynomial".
 //
 // Copyright (C) 2023 by Michał Pilarczyk.
 //
@@ -19,79 +19,104 @@
 // Started on 14.10.2023. Last revision: 15.10.2023.
 
 #include <iostream>
-#include <stdexcept>
 #include "polynomial.h"
 
-poly& minimize(poly &a) {
-  while (!a.empty() && a.back() == 0.0) {
-      a.pop_back();
-  }
-  return a;
-}
+using std::vector;
+using std::cout;
+using std::endl;
 
-int deg(const poly &b) {
-  if (b.empty())
-    return -1;
-  else
-    return b.size()-1;
-}
+void test_add() {
+  poly p1;
+  p1.push_back(0);
+  p1.push_back(1);
+  p1.push_back(3.5);
+  p1.push_back(0);
+  p1.push_back(6);
+  p1.push_back(0);
 
-poly add(const poly &c,const poly &d) {
+  poly p2;
+  p2.push_back(5);
+  p2.push_back(6);
+  p2.push_back(8);
+
   poly wynik;
-  for (int i = 0; i <= std::min(deg(c),deg(d)); ++i) {
-    wynik.push_back(c[i]+d[i]);
-  }
-  for (int i = std::min(deg(c),deg(d))+1; i <= std::max(deg(c),deg(d)); ++i) {
-    wynik.push_back((deg(c)<deg(d)) ? d[i] : c[i]);
-  }
-  minimize(wynik);
-  return wynik;
+  wynik=add(p1,p2);
+  cout<<"Test dodawania:"<<endl;
+  cout<<"\tp1(x) = "<<p1<<endl;
+  cout<<"\tp2(x) = "<<p2<<endl;
+  cout<<"\tp1(x)+p2(x) = "<<wynik<<endl;
 }
 
-poly mul(const poly &e,const poly &f) {
+void test_sub() {
+  poly p1;
+  p1.push_back(0);
+  p1.push_back(1);
+  p1.push_back(3.5);
+  p1.push_back(0);
+  p1.push_back(6);
+  p1.push_back(0);
+
+  poly p2;
+  p2.push_back(5);
+  p2.push_back(6);
+  p2.push_back(8);
+
   poly wynik;
-  for (int k=0 ; k<=deg(e)+deg(f); ++k) {
-    double suma=0;
-    for (int i=0 ; i<=k ; ++i) {
-      if (i<=deg(e) && k-i<=deg(f)) {
-        suma += e[i]*f[k-i];
-      }
-    }
-    wynik.push_back(suma);
+  wynik=sub(p1,p2);
+  cout<<"Test odejmowania:"<<endl;
+  cout<<"\tp1(x) = "<<p1<<endl;
+  cout<<"\tp2(x) = "<<p2<<endl;
+  cout<<"\tp1(x)-p2(x) = "<<wynik<<endl;
+}
+
+void test_lagrange() {
+  vector<double> x,y;
+  x.push_back(-1);
+  y.push_back(0);
+  x.push_back(0);
+  y.push_back(-1);
+  x.push_back(1);
+  y.push_back(0);
+  x.push_back(2);
+  y.push_back(3);
+
+  poly wynik=lagrange(x,y);
+  cout<<"Test interpolacji Lagrange'a:"<<endl;
+  for (int i=0;i<x.size();i++) {
+    cout<<"\t("<<x[i]<<";"<<y[i]<<") ";
   }
-  minimize(wynik);
-  return wynik;
+  cout<<endl;
+  cout<<"\tWielomian przechodzący przez te punkty: "<<wynik<<endl;
+  //cout<<"\tx = "<<x<<endl;
+  //cout<<"\ty = "<<y<<endl;
 }
 
-poly sub(const poly &c,const poly &d) {
-  poly minus1;
-  minus1.push_back(-1);
-  poly minusd;
-  minusd=mul(d,minus1);
-  return add(c,minusd);
-}
+void test_mul() {
+  poly p1;
+  p1.push_back(0);
+  p1.push_back(1);
+  p1.push_back(3.5);
+  p1.push_back(0);
+  p1.push_back(6);
+  p1.push_back(0);
 
-poly lagrange (const std::vector<double> x, const std::vector<double> y) {
-  int n=x.size();
-  if(y.size()!=x.size())
-    throw std::domain_error("x and y must have the same size");
+  poly p2;
+  p2.push_back(5);
+  p2.push_back(6);
+  p2.push_back(8);
+
   poly wynik;
-  for (int i=0; i<n; ++i) {
-    poly iloczyn;
-    iloczyn.push_back(1);
-    for (int j=0; j<n; ++j) {
-      if (i==j)
-        continue;
-      poly czynnik;
-      czynnik.push_back(-x[j]/(x[i]-x[j]));
-      czynnik.push_back(1.0/(x[i]-x[j]));
-      iloczyn=mul(iloczyn,czynnik);
-    }
-    poly y_i;
-    y_i.push_back(y[i]);
-    iloczyn=mul(iloczyn,y_i);
-    wynik=add(wynik,iloczyn);
-  }
-  minimize(wynik);
-  return wynik;
+  wynik=mul(p1,p2);
+  cout<<"Test mnożenia:"<<endl;
+  cout<<"\tp1(x) = "<<p1<<endl;
+  cout<<"\tp2(x) = "<<p2<<endl;
+  cout<<"\tp1(x)*p2(x) = "<<wynik<<endl;
+}
+
+int main() {
+  test_add();
+  test_sub();
+  test_mul();
+  test_lagrange();
+  return 0;
 }
