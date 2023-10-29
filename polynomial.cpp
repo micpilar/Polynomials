@@ -16,7 +16,7 @@
 // along with this software; see the file "LICENSE". If not,
 // please, see <https://www.gnu.org/licenses/>.
 
-// Started on 14.10.2023. Last revision: 15.10.2023.
+// Started on 14.10.2023. Last revision: 29 .10.2023.
 
 #include <iostream>
 #include <stdexcept>
@@ -30,10 +30,36 @@ poly& minimize(poly &a) {
 }
 
 int deg(const poly &b) {
-  if (b.empty())
+  if (b.empty()||(b.size()==1&&b.front()==0.0))
     return -1;
   else
     return b.size()-1;
+}
+
+double evaluate(const poly &a, double x) {
+  double result = 0.0;
+  for (int i = 0; i < a.size(); i++) {
+    result += a[i] * pow(x, i);
+  }
+  return result;
+}
+
+intpoly convert(const poly &a) {
+  intpoly result;
+  for (int i = 0; i < a.size(); i++) {
+    if (floor(a[i])!=a[i])
+      throw std::domain_error("non-integer coefficient");
+    result.push_back(a[i]);
+  }
+  return result;
+}
+
+poly unconvert(const intpoly &a) {
+  poly result;
+  for (int i = 0; i < a.size(); i++) {
+    result.push_back(static_cast<double>(a[i]));
+  }
+  return(result);
 }
 
 poly add(const poly &c,const poly &d) {
@@ -93,5 +119,24 @@ poly lagrange (const std::vector<double> x, const std::vector<double> y) {
     wynik=add(wynik,iloczyn);
   }
   minimize(wynik);
+  return wynik;
+}
+
+poly Horner(const poly &a, double c) {
+  if (deg(a)==-1)
+    throw std::domain_error("empty polynomial");
+  if (deg(a)==0)
+    throw std::domain_error("polynomial has no roots");
+  poly wynik;
+  intpoly aint = convert(a);
+  int n=deg(a);
+  intpoly result(n);
+  std::cout<<aint.size()<<result.size()<<std::endl;
+  result.at(n-1)=aint.at(n);
+  for (int k=2;k<=n;++k) {
+    result.at(n-k)=(aint.at(n-(k-1))+c*result.at(n-(k-1)));
+  }
+  wynik=unconvert(result);
+  wynik=minimize(wynik);
   return wynik;
 }
