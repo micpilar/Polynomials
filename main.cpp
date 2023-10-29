@@ -16,7 +16,7 @@
 // along with this software; see the file "LICENSE". If not,
 // please, see <https://www.gnu.org/licenses/>.
 
-// Started on 14.10.2023. Last revision: 15.10.2023.
+// Started on 14.10.2023. Last revision: 29.10.2023.
 
 #include <iostream>
 #include "polynomial.h"
@@ -71,14 +71,16 @@ void test_sub() {
 
 void test_lagrange() {
   vector<double> x,y;
-  x.push_back(-1);
-  y.push_back(0);
-  x.push_back(0);
-  y.push_back(-1);
   x.push_back(1);
-  y.push_back(0);
+  y.push_back(2);
   x.push_back(2);
   y.push_back(3);
+  x.push_back(3);
+  y.push_back(4);
+  x.push_back(4);
+  y.push_back(5);
+  x.push_back(5);
+  y.push_back(6);
 
   poly wynik=lagrange(x,y);
   cout<<"Test interpolacji Lagrange'a:"<<endl;
@@ -113,10 +115,28 @@ void test_mul() {
   cout<<"\tp1(x)*p2(x) = "<<wynik<<endl;
 }
 
+void test_horner() {
+  poly p1;
+  p1.push_back(-1);
+  p1.push_back(4);
+  p1.push_back(-5);
+  p1.push_back(2);
+
+  double c=1;
+  
+  poly wynik;
+  wynik=Horner(p1,c);
+  cout<<"Test schematu Hornera"<<endl;
+  cout<<"\tp1(x) = "<<p1<<endl;
+  cout<<"\tc = "<<c<<endl;
+  cout<<"\tp1(x)/(x-c) = "<<wynik<<endl;
+}
+
 int main() {
   test_add();
   test_sub();
   test_mul();
   test_lagrange();
+  test_horner();
   return 0;
 }
