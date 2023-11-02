@@ -16,7 +16,7 @@
 // along with this software; see the file "LICENSE". If not,
 // please, see <https://www.gnu.org/licenses/>.
 
-// Started on 14.10.2023. Last revision: 29.10.2023.
+// Started on 14.10.2023. Last revision: 02.11.2023.
 
 #include <iostream>
 #include "polynomial.h"
@@ -117,7 +117,7 @@ void test_mul() {
 
 void test_horner() {
   poly p1;
-  p1.push_back(-1);
+  p1.push_back(-2);
   p1.push_back(4);
   p1.push_back(-5);
   p1.push_back(2);
@@ -125,11 +125,13 @@ void test_horner() {
   double c=1;
   
   poly wynik;
-  wynik=Horner(p1,c);
+  double reszta;
+  wynik=Horner(p1,c,reszta);
   cout<<"Test schematu Hornera"<<endl;
   cout<<"\tp1(x) = "<<p1<<endl;
   cout<<"\tc = "<<c<<endl;
   cout<<"\tp1(x)/(x-c) = "<<wynik<<endl;
+  cout<<"\treszta = "<<reszta<<endl;
 }
 
 int main() {
