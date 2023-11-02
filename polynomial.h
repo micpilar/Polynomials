@@ -16,7 +16,7 @@
 // along with this software; see the file "LICENSE". If not,
 // please, see <https://www.gnu.org/licenses/>.
 
-// Started on 14.10.2023. Last revision: 29.10.2023.
+// Started on 14.10.2023. Last revision: 02.11.2023.
 
 #pragma once
 #include <vector>
@@ -38,7 +38,7 @@ poly add(const poly &c,const poly &d); //zwraca wektor będący reprezentacją w
 poly sub(const poly &e,const poly &f); //zwraca wektor będący reprezentacją wielomianu różnicy dwóch wielomianów
 poly mul(const poly &g,const poly &h); //zwraca wektor będący reprezentacją wielomianu mnożenia dwóch wielomianów
 poly lagrange(const std::vector<double> x, const std::vector<double> y); //zwraca wektor będący reprezentacją wielomianu interpolyjnego obliczonego według wzorów Lagrange'a; wartości wielomianu w punktach x[i] wynoszą y[i]
-poly Horner(const poly &a, double c); //zwraca wynik dzielenia wielomianu a przez wielomian b; wszystkie ich współczynniki muszą być całkowite
+poly Horner(const poly &a, double c, double &b); //zwraca wynik dzielenia wielomianu a przez x-c; wszystkie współczynniki a muszą być całkowite; reszta z dzielenia jest zapisywana w znmiennej b
 
 template <typename STREAM>
 STREAM &operator<<(STREAM &s, const poly &p)
