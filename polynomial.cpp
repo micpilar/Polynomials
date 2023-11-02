@@ -16,7 +16,7 @@
 // along with this software; see the file "LICENSE". If not,
 // please, see <https://www.gnu.org/licenses/>.
 
-// Started on 14.10.2023. Last revision: 29 .10.2023.
+// Started on 14.10.2023. Last revision: 02.11.2023.
 
 #include <iostream>
 #include <stdexcept>
@@ -122,21 +122,19 @@ poly lagrange (const std::vector<double> x, const std::vector<double> y) {
   return wynik;
 }
 
-poly Horner(const poly &a, double c) {
+poly Horner(const poly &a, double c, double &b) { //zmienić na poly
   if (deg(a)==-1)
     throw std::domain_error("empty polynomial");
   if (deg(a)==0)
     throw std::domain_error("polynomial has no roots");
-  poly wynik;
-  intpoly aint = convert(a);
   int n=deg(a);
-  intpoly result(n);
-  std::cout<<aint.size()<<result.size()<<std::endl;
-  result.at(n-1)=aint.at(n);
+  poly result(n);
+  //std::cout<<a.size()<<result.size()<<std::endl;
+  result.at(n-1)=a.at(n);
   for (int k=2;k<=n;++k) {
-    result.at(n-k)=(aint.at(n-(k-1))+c*result.at(n-(k-1)));
+    result.at(n-k)=(a.at(n-(k-1))+c*result.at(n-(k-1)));
   }
-  wynik=unconvert(result);
-  wynik=minimize(wynik);
-  return wynik;
+  b=a.at(0)+c*result.at(0);
+  result=minimize(result);
+  return result;
 }
